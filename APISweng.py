@@ -1,4 +1,5 @@
 import requests
+import numpy as np
 import matplotlib.pyplot as plt
 
 
@@ -94,18 +95,37 @@ for p in range(len(language_data)):
 
 for i in range(len(language_data)):
     new_data.insert(i, language_data[i])
-#print(total_languages_used(new_data))
+new_data = (total_languages_used(new_data))
 
 
 languages = []
 times_languages_used = []
-for q in range(len(new_data)):
-    for p in range(len(new_data[q])):
-        languages.append(new_data[q][p][0])
-        times_languages_used.append(new_data[q][p][1])
 
-#print(languages)
-#print(times_languages_used)
+for p in range(len(new_data)):
+    languages.append(new_data[p][0])
+    times_languages_used.append(new_data[p][1])
+
+print(languages)
+print(times_languages_used)
 
 # PLOTTING
 
+fig, ax = plt.subplots(figsize=(6, 4), subplot_kw=dict(aspect="equal"))
+
+wedges, texts = ax.pie(times_languages_used, wedgeprops=dict(width=0.6, edgecolor = 'black'), startangle=45)
+
+bbox_props = dict(boxstyle="square,pad=0.3", fc="w", ec="k", lw=0.72)
+kw = dict(arrowprops=dict(arrowstyle="-"), bbox=bbox_props, zorder=0, va="center")
+
+for i, p in enumerate(wedges):
+    ang = (p.theta2 - p.theta1)/2. + p.theta1
+    y = np.sin(np.deg2rad(ang))
+    x = np.cos(np.deg2rad(ang))
+    horizontalalignment = {-1: "right", 1: "left"}[int(np.sign(x))]
+    connectionstyle = "angle,angleA=0,angleB={}".format(ang)
+    kw["arrowprops"].update({"connectionstyle": connectionstyle})
+    ax.annotate(languages[i]+" :"+(str)(times_languages_used[i]), xy=(x, y), xytext=(1.35*np.sign(x), 1.4*y), horizontalalignment=horizontalalignment, **kw)
+
+ax.set_title("Languages and how much they were used")
+
+plt.show()
