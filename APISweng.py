@@ -11,12 +11,10 @@ def query(username):
     return data
 
 
-def how_much_language_used(username):
+def how_much_language_used(data):
     all_languages = []
     times_used = []
     found_language = False
-
-    data = query(username)
 
     for j in data:
         if j['language'] is not None:
@@ -76,18 +74,44 @@ def total_languages_used(data):
 
     return return_data
 
+def main_language_corolation(new_data, languages):
+    corrolation_table = [[0 for k in range(len(languages))] for j in range(len(languages))]
+
+    languages_used_by_user = []
+    for a in range(len(new_data)):
+        for b in range(len(new_data[a])):
+            for c in range(len(languages)):
+                if new_data[a][b][0] == languages[c]:
+                    languages_used_by_user.append(new_data[a][b][1])
+
+        add_to_corrolation_table(corrolation_table, languages_used_by_user)
+        languages_used_by_user = []
+
+
+    return corrolation_table
+
+def add_to_corrolation_table(table, lang_used):
+    for i in range(len(lang_used)):
+        for k in range(len(lang_used)):
+            if lang_used[i] != lang_used[k]:
+                table[i][k] += 1
+    return table
+
 
 # TESTING
 
-data = (query('GregoryPartridgeSweng'))
+#data = (query('GregoryPartridgeSweng'))
 
+users_data = []
 language_data = []
 new_data = []
 corresponding_users_to_data = []
 
+users_data.append(query('GregoryPartridgeSweng'))
 
-language_data.insert(len(language_data), how_much_language_used("GregoryPartridgeSweng"))
-corresponding_users_to_data.insert(len(corresponding_users_to_data), "GregoryPartridgeSweng")
+for i in range(len(users_data)):
+    language_data.insert(len(language_data), how_much_language_used(users_data[i]))
+    corresponding_users_to_data.insert(len(corresponding_users_to_data), users_data[i])
 
 for p in range(len(language_data)):
     string = language_data[p]
@@ -95,18 +119,26 @@ for p in range(len(language_data)):
 
 for i in range(len(language_data)):
     new_data.insert(i, language_data[i])
-new_data = (total_languages_used(new_data))
+total_data = (total_languages_used(new_data))
 
 
 languages = []
 times_languages_used = []
 
-for p in range(len(new_data)):
-    languages.append(new_data[p][0])
-    times_languages_used.append(new_data[p][1])
+for p in range(len(total_data)):
+    languages.append(total_data[p][0])
+    times_languages_used.append(total_data[p][1])
 
-print(languages)
-print(times_languages_used)
+#print(languages)
+#print(times_languages_used)
+
+print(main_language_corolation(new_data, languages))
+
+
+
+
+
+
 
 # PLOTTING
 
