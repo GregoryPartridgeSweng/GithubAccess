@@ -1,6 +1,5 @@
 import requests
-import json
-import os
+import matplotlib.pyplot as plt
 
 
 def query(username):
@@ -9,70 +8,6 @@ def query(username):
     r = requests.get(url, auth=(username, token))
     data = r.json()
     return data
-
-
-def return_all_projects(username):
-    return_data = []
-    data = query(username)
-
-    for r in data:
-        return_data.append(r['name'])
-    return return_data
-
-
-def language_used(username):
-    return_data = []
-    data = query(username)
-
-    for j in data:
-        if j['language'] is not None:
-            return_data.append(j['language'])
-
-    return return_data
-
-
-def return_all_projects_size(username):
-    return_data = []
-    data = query(username)
-
-    for r in data:
-        return_data.append(r['size'])
-    return return_data
-
-
-def largest_project(username):
-    data = query(username)
-    max_size = 0
-
-    for j in data:
-        if j['size'] > max_size:
-            max_size = j['size']
-    return max_size
-
-
-def smallest_project(username):
-    data = query(username)
-    min_size = 0
-
-    for j in data:
-
-        if j['size'] < min_size or min_size < 0:
-            min_size = j['size']
-    return min_size
-
-
-def average_project_size(username):
-    data = query(username)
-
-    product = 0
-    total_software_projects = 0
-
-    for j in data:
-        if j['language'] is not None:
-            product += j['size']
-            total_software_projects += 1
-    average = round((product / total_software_projects), 2)
-    return average
 
 
 def how_much_language_used(username):
@@ -143,19 +78,8 @@ def total_languages_used(data):
 
 # TESTING
 
-#print(json.dumps(query('GregoryPartridgeSweng'), indent = 5))
+data = (query('GregoryPartridgeSweng'))
 
-# print(return_all_projects('GregoryPartridgeSweng'))
-
-# print(language_used('GregoryPartridgeSweng'))
-
-# print(return_all_projects_size('GregoryPartridgeSweng'))
-
-# print(largest_project('GregoryPartridgeSweng'))
-
-# print(smallest_project('GregoryPartridgeSweng'))
-
-# print(average_project_size("GregoryPartridgeSweng"))
 language_data = []
 new_data = []
 corresponding_users_to_data = []
@@ -164,14 +88,24 @@ corresponding_users_to_data = []
 language_data.insert(len(language_data), how_much_language_used("GregoryPartridgeSweng"))
 corresponding_users_to_data.insert(len(corresponding_users_to_data), "GregoryPartridgeSweng")
 
-#print(corresponding_users_to_data)
-#print(language_data)
-
 for p in range(len(language_data)):
     string = language_data[p]
-    print(corresponding_users_to_data[p]+": "+(str)(string))
+    #print(corresponding_users_to_data[p]+": "+(str)(string))
 
 for i in range(len(language_data)):
     new_data.insert(i, language_data[i])
+#print(total_languages_used(new_data))
 
-print(total_languages_used(new_data))
+
+languages = []
+times_languages_used = []
+for q in range(len(new_data)):
+    for p in range(len(new_data[q])):
+        languages.append(new_data[q][p][0])
+        times_languages_used.append(new_data[q][p][1])
+
+#print(languages)
+#print(times_languages_used)
+
+# PLOTTING
+
