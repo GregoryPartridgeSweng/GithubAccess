@@ -3,6 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 
+
 def query(username):
     url = 'https://api.github.com/users/' + username + '/repos'
     token = open("APIToken", "r")
@@ -76,7 +77,6 @@ def total_languages_used(data):
 
 def main_language_corolation(new_data, languages):
     corrolation_table = [[0 for k in range(len(languages))] for j in range(len(languages))]
-
     languages_used_by_user = []
     for a in range(len(new_data)):
         for b in range(len(new_data[a])):
@@ -87,15 +87,35 @@ def main_language_corolation(new_data, languages):
         add_to_corrolation_table(corrolation_table, languages_used_by_user)
         languages_used_by_user = []
 
-
     return corrolation_table
 
 def add_to_corrolation_table(table, lang_used):
+
+    for p in range(len(lang_used)):
+        if lang_used[p] == 7 or lang_used[p] == 8 or lang_used[p] == 9 or lang_used[p] == 10:
+            print("HERE")
+
     for i in range(len(lang_used)):
         for k in range(len(lang_used)):
             if lang_used[i] != lang_used[k]:
                 table[i][k] += 1
     return table
+
+def most_connected_lang(table):
+
+    language_connected = []
+    counter = 0
+
+    for i in range(len(table)):
+        for j in range(len(table[i])):
+            if table[i][j] != 0:
+                counter += 1
+        language_connected.append(counter)
+        counter = 0
+
+    return language_connected
+
+
 
 
 # TESTING
@@ -107,7 +127,7 @@ language_data = []
 new_data = []
 corresponding_users_to_data = []
 
-users_data.append(query('GregoryPartridgeSweng'))
+users_data.append(query('GregoryPartridgeSweng')
 
 for i in range(len(users_data)):
     language_data.insert(len(language_data), how_much_language_used(users_data[i]))
@@ -132,8 +152,12 @@ for p in range(len(total_data)):
 #print(languages)
 #print(times_languages_used)
 
-print(main_language_corolation(new_data, languages))
+table = (main_language_corolation(new_data, languages))
 
+most_connected_language = most_connected_lang(table)
+
+for i in range(len(languages)):
+    print((str)(languages[i])+": "+(str)(most_connected_language[i]))
 
 
 
@@ -141,6 +165,13 @@ print(main_language_corolation(new_data, languages))
 
 
 # PLOTTING
+plt.style.use('seaborn-darkgrid')
+
+plt.rcParams.update({
+    "figure.facecolor": "xkcd:wheat",
+    "figure.edgecolor": "xkcd:wheat",
+    "savefig.facecolor": "xkcd:wheat",
+    "savefig.edgecolor": "xkcd:wheat"})
 
 fig, ax = plt.subplots(figsize=(6, 4), subplot_kw=dict(aspect="equal"))
 
@@ -159,5 +190,22 @@ for i, p in enumerate(wedges):
     ax.annotate(languages[i]+" :"+(str)(times_languages_used[i]), xy=(x, y), xytext=(1.35*np.sign(x), 1.4*y), horizontalalignment=horizontalalignment, **kw)
 
 ax.set_title("Languages and how much they were used")
+
+plt.show()
+
+plt.style.use('seaborn')
+plt.rcdefaults()
+fig, ax = plt.subplots()
+
+languages_used = languages
+y_pos = np.arange(len(languages_used))
+performance = most_connected_language
+
+ax.barh(y_pos, performance, align='center')
+ax.set_yticks(y_pos)
+ax.set_yticklabels(languages_used)
+ax.invert_yaxis()  # labels read top-to-bottom
+ax.set_xlabel('Times Used')
+ax.set_title('How many languages are conncected to other languages')
 
 plt.show()
