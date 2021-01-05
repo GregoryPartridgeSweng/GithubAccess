@@ -21,9 +21,9 @@ From here I would go through each language the user used and incremented the rel
 For the main language connected data, I found the most common language connected to each language and would then add those languages that were the main language to a list with the number of times they were the main language to another language. I would then graph the data.
 
 I used Matplotlib for the visualisations part of the task making 3 graphs in total. 
-  -The first showing each language and how much it was used.
-  -The second showing how connected each language was to other languages.
-  -The third showing how many languages each language represented as the main language connected.
+    -The first showing each language and how much it was used.
+    -The second showing how connected each language was to other languages.
+    -The third showing how many languages each language represented as the main language connected.
   
 *To run the program, you will have to manually edit the file "Users" and add the users you wish to run in the program. I failed to add a method to add users through the program
 
@@ -31,3 +31,5 @@ When you run the program, you will be also given data. The data will be:
 
     - The languages each language is connected to and how many times.
     - The main language connected to it and how much. Different from the third graph as it is from the language connected to the main rather than the main language.
+
+Note- I know my project was not updated early on, this was due to being in the country over Christmas and having an unreliable internet connection.
