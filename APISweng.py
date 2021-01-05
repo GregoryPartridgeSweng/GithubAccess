@@ -139,10 +139,20 @@ def main_table(table):
 
 def times_main_to_lang(table, languages):
 
-    return_table = [0 for k in range(len(languages))]
+    beta_return_table = [0 for k in range(len(languages))]
 
     for i in range(len(table)):
-        return_table[table[i][1]] += 1
+        beta_return_table[table[i][1]] += 1
+
+    return_table = []
+    holder = []
+
+    for j in range(len(beta_return_table)):
+        if beta_return_table[j] != 0:
+            holder.append(languages[j])
+            holder.append(beta_return_table[j])
+            return_table.append(holder)
+            holder = []
 
     return return_table
 
@@ -183,6 +193,7 @@ for p in range(len(total_data)):
 table = (main_language_corolation(new_data, languages))
 
 most_connected_language = most_connected_lang(table)
+print(most_connected_language)
 main_table = main_table(table)
 
 print(main_table)
@@ -193,11 +204,13 @@ for i in range(len(main_table)):
     print("Times Used: "+(str)(main_table[i][0]))
     print("---")
 
-# for i in range(len(languages)):
-#     print((str)(languages[i])+": "+(str)(most_connected_language[i]))
+main_to_lang_table = (times_main_to_lang(main_table, languages))
 
-
-
+lang = []
+times_used = []
+for z in range(len(main_to_lang_table)):
+    times_used.append(main_to_lang_table[z][0])
+    lang.append(main_to_lang_table[z][1])
 
 
 
@@ -243,6 +256,25 @@ ax.set_yticks(y_pos)
 ax.set_yticklabels(languages_used)
 ax.set_xlabel('Languages Tied To')
 ax.set_title('How many languages are conncected to other languages')
+
+
+plt.show()
+
+plt.show()
+
+
+plt.rcdefaults()
+fig, ax = plt.subplots()
+
+languages_used = times_used
+y_pos = np.arange(len(times_used))
+performance = lang
+
+ax.barh(y_pos, performance, align='center')
+ax.set_yticks(y_pos)
+ax.set_yticklabels(languages_used)
+ax.set_xlabel('Languages Tied To as Main Language')
+ax.set_title('How many languages they are the main langnguage connected for')
 
 
 plt.show()
