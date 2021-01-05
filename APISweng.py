@@ -6,8 +6,7 @@ import matplotlib.pyplot as plt
 
 def query(username):
     url = 'https://api.github.com/users/' + username + '/repos'
-    token = open("APIToken", "r")
-    r = requests.get(url, auth=(username, token))
+    r = requests.get(url)
     data = r.json()
     return data
 
@@ -156,6 +155,15 @@ def times_main_to_lang(table, languages):
 
     return return_table
 
+def all_users():
+    list_of_users = []
+    all_users = open("Users", "r")
+
+    for data in all_users.readlines():
+        list_of_users.append(query(data.rstrip('\n')))
+    all_users.close()
+
+    return list_of_users
 # TESTING
 
 #data = (query('GregoryPartridgeSweng'))
@@ -165,8 +173,8 @@ language_data = []
 new_data = []
 corresponding_users_to_data = []
 
-users_data.append(query('GregoryPartridgeSweng'))
-
+users_data = all_users()
+print(users_data)
 
 for i in range(len(users_data)):
     language_data.insert(len(language_data), how_much_language_used(users_data[i]))
