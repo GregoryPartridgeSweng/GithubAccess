@@ -1,3 +1,5 @@
+import math
+
 import requests
 import numpy as np
 import matplotlib.pyplot as plt
@@ -156,17 +158,14 @@ def times_main_to_lang(table, languages):
     return return_table
 
 def all_users():
-    list_of_users = []
+    list_of_users_data = []
     all_users = open("Users", "r")
 
     for data in all_users.readlines():
-        list_of_users.append(query(data.rstrip('\n')))
+        list_of_users_data.append(query(data.rstrip('\n')))
     all_users.close()
 
-    return list_of_users
-# TESTING
-
-#data = (query('GregoryPartridgeSweng'))
+    return list_of_users_data
 
 users_data = []
 language_data = []
@@ -174,7 +173,7 @@ new_data = []
 corresponding_users_to_data = []
 
 users_data = all_users()
-print(users_data)
+
 
 for i in range(len(users_data)):
     language_data.insert(len(language_data), how_much_language_used(users_data[i]))
@@ -195,22 +194,25 @@ for p in range(len(total_data)):
     languages.append(total_data[p][0])
     times_languages_used.append(total_data[p][1])
 
-#print(languages)
-#print(times_languages_used)
-
 table = (main_language_corolation(new_data, languages))
 
 most_connected_language = most_connected_lang(table)
-print(most_connected_language)
+
 main_table = main_table(table)
 
-print(main_table)
+for j in range(len(table)):
+    print(languages[j])
+    for k in range(len(table[j])):
+        if j != k:
+            print("     "+(str)(languages[k])+": "+(str)(table[j][k]))
+    print("\n")
 
 for i in range(len(main_table)):
     print(languages[i])
     print("Most used: "+(str)(languages[main_table[i][1]]))
     print("Times Used: "+(str)(main_table[i][0]))
     print("---")
+
 
 main_to_lang_table = (times_main_to_lang(main_table, languages))
 
@@ -220,7 +222,9 @@ for z in range(len(main_to_lang_table)):
     times_used.append(main_to_lang_table[z][0])
     lang.append(main_to_lang_table[z][1])
 
-
+tally = 0
+for a in range(len(times_languages_used)):
+    tally += times_languages_used[a]
 
 # PLOTTING
 plt.style.use('seaborn-darkgrid')
@@ -245,9 +249,10 @@ for i, p in enumerate(wedges):
     horizontalalignment = {-1: "right", 1: "left"}[int(np.sign(x))]
     connectionstyle = "angle,angleA=0,angleB={}".format(ang)
     kw["arrowprops"].update({"connectionstyle": connectionstyle})
-    ax.annotate(languages[i]+" :"+(str)(times_languages_used[i]), xy=(x, y), xytext=(1.35*np.sign(x), 1.4*y), horizontalalignment=horizontalalignment, **kw)
+    if tally < 50 or times_languages_used[i] > math.floor(tally/50):
+        ax.annotate(languages[i]+" :"+(str)(times_languages_used[i]), xy=(x, y), xytext=(1.35*np.sign(x), 1.4*y), horizontalalignment=horizontalalignment, **kw)
 
-ax.set_title("Languages and how much they were used")
+ax.set_title("Languages and their proportional use")
 
 plt.show()
 
@@ -262,8 +267,8 @@ performance = most_connected_language
 ax.barh(y_pos, performance, align='center')
 ax.set_yticks(y_pos)
 ax.set_yticklabels(languages_used)
-ax.set_xlabel('Languages Tied To')
-ax.set_title('How many languages are conncected to other languages')
+ax.set_xlabel('Languages Connected To')
+ax.set_title('How connected are languages to other listed languages')
 
 
 plt.show()
@@ -282,7 +287,7 @@ ax.barh(y_pos, performance, align='center')
 ax.set_yticks(y_pos)
 ax.set_yticklabels(languages_used)
 ax.set_xlabel('Languages Tied To as Main Language')
-ax.set_title('How many languages they are the main langnguage connected for')
+ax.set_title('How many languages that are the main language to a connected language')
 
 
 plt.show()
