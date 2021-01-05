@@ -79,15 +79,15 @@ def main_language_corolation(new_data, languages):
     correlation_table = [[0 for k in range(len(languages))] for j in range(len(languages))]
     main_lang_correlation_table = correlation_table
     languages_used_by_user = []
-    print(languages)
+    # print(languages)
     for a in range(len(new_data)):
         for b in range(len(new_data[a])):
 
             for c in range(len(languages)):
                 if new_data[a][b][0] == languages[c]:
-                    print(new_data[a][b][0])
+                    # print(new_data[a][b][0])
                     languages_used_by_user.append(c)
-        print(languages_used_by_user)
+        #print(languages_used_by_user)
         correlation_table = add_to_corrolation_table(correlation_table, languages_used_by_user)
 
         languages_used_by_user = []
@@ -109,7 +109,6 @@ def most_connected_lang(table):
 
     language_connected = []
     counter = 0
-    print(table)
 
     for i in range(len(table)):
         for j in range(len(table[i])):
@@ -121,18 +120,31 @@ def most_connected_lang(table):
     return language_connected
 
 def main_table(table):
-    most_used_lang_connected_table = [[0 for k in range(len(languages))] for j in 2]
+    most_used_lang_connected_table = []
     most_used = -1
     lang = -1
+    holder = []
     for i in range(len(table)):
         for j in range(len(table[i])):
             if table[i][j] > most_used:
                 most_used = table[i][j]
                 lang = j
-        most_used_lang_connected_table[i][0] = most_used
-        most_used_lang_connected_table[i][1] = lang
+        holder.append(most_used)
+        holder.append(lang)
+        most_used_lang_connected_table.append(holder)
+        most_used = -1
+        lang = -1
+        holder = []
     return most_used_lang_connected_table
 
+def times_main_to_lang(table, languages):
+
+    return_table = [0 for k in range(len(languages))]
+
+    for i in range(len(table)):
+        return_table[table[i][1]] += 1
+
+    return return_table
 
 # TESTING
 
@@ -158,8 +170,6 @@ for i in range(len(language_data)):
     new_data.insert(i, language_data[i])
 total_data = (total_languages_used(new_data))
 
-print(new_data)
-
 languages = []
 times_languages_used = []
 
@@ -174,6 +184,14 @@ table = (main_language_corolation(new_data, languages))
 
 most_connected_language = most_connected_lang(table)
 main_table = main_table(table)
+
+print(main_table)
+
+for i in range(len(main_table)):
+    print(languages[i])
+    print("Most used: "+(str)(languages[main_table[i][1]]))
+    print("Times Used: "+(str)(main_table[i][0]))
+    print("---")
 
 # for i in range(len(languages)):
 #     print((str)(languages[i])+": "+(str)(most_connected_language[i]))
